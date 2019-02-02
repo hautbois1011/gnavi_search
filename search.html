@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ぐるなび周辺検索</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+  <h1>位置情報取得</h1>
+  <button onclick="getPosition();">位置情報取得</button>
+  
+  <hr/>
+  
+  <h1>検索</h1>
+  範囲:
+  <select id="range">
+    <option value=1>300m</option>
+    <option value=2>500m</option>
+    <option value=3 selected>1000m</option>
+    <option value=4>2000m</option>
+    <option value=5>3000m</option>
+  </select>
+  <input type="button" onclick="search();" value="検索">
+
+
+  <script>
+    // Geolocation APIに対応している
+    if(!navigator.geolocation) {
+      alert("この端末では位置情報が取得できません");
+    }
+
+    // 緯度と経度
+    var lati = 0;
+    var longi = 0;
+
+    // 現在地取得処理
+    function getPosition() {
+      // 現在地を取得
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          lati = position.coords.latitude;
+          longi = position.coords.longitude;
+          alert("緯度:" + lati + ",経度:" + longi);
+        },
+        function(error) {
+          switch(error.code) {
+            case 1: //PERMISSION_DENIED
+              alert("位置情報の利用が許可されていません");
+              break;
+            case 2: //POSITION_UNAVAILABLE
+              alert("現在位置が取得できませんでした");
+              break;
+            case 3: //TIMEOUT
+              alert("タイムアウト");
+              break;
+            default:
+              alert("エラーコード:"+error.code);
+              break;
+          }
+        }
+      );
+    }
+    // 検索
+    function search() {
+      console.log("search onclick");
+      document.location = "result.html?latitude=" + lati + "&longitude=" + longi
+                          + "&range=" + $("#range").val() + "&offset_page=1";
+    }
+
+    // ロード時の処理: 現在地取得
+    $(window).on("load", function() {
+      getPosition();
+    });
+  </script>
+</html>

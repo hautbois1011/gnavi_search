@@ -1,0 +1,66 @@
+<!DOCYTPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ぐるなび周辺検索</title>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+  <h1>店舗名</h1>
+  <div id="name"></div>
+  <h1>住所</h1>
+  <div id="address"></div>
+  <h1>電話番号</h1>
+  <div id="tel"></div>
+  <h1>営業時間</h1>
+  <div id="opentime"></div>
+  <h1>画像</h1>
+  <div id="image"></div>
+  
+
+  <script>
+    // GETパラメータを取得
+    function getQueryString() {
+      if(document.location.search.length <= 1) {
+        return null;
+      }
+      
+      var params = document.location.search.substring(1).split('&');
+      var result = new Object();
+      for(var i = 0; i < params.length; i++) {
+        var elem = params[i].split('=');
+        result[decodeURIComponent(elem[0])] = decodeURIComponent(elem[1]);
+      }
+      return result;
+    }
+  
+    // 結果の表示
+    function onGetJSON(result) {
+      rest = result.rest[0];
+      $("#name").html(rest.name + '(' + rest.name_kana + ')');
+      $("#address").html(rest.address);
+      $("#tel").html(rest.tel);
+      $("#opentime").html(rest.opentime);
+      $("#image").html("<img src=\"" + rest.image_url.shop_image1 + "\">"
+        + "<img src=\"" + rest.image_url.shop_image2 + "\">");
+    }
+  
+    // ロード時の処理
+    $(window).on('load', function() {
+      var query = getQueryString();
+      if(!query["rest_id"]) {
+        alert("店舗idを指定してください");
+        return;
+      }
+      var url = "https://api.gnavi.co.jp/RestSearchAPI/v3/";
+      var params = {
+        keyid: "21a74b591f5aca9b1ebde8b6c7609ebb",
+        id: query["rest_id"]
+      };
+      $.getJSON(url, params, function(result) {
+        onGetJSON(result);
+      });
+    });
+  </script>
+<html>
