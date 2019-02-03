@@ -6,7 +6,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <body>
-  検索結果:<span id="freeword"></span>現在地より<span id="range"></span>mの範囲内で見つかったレストラン<br/>
+  検索結果:<span id="freeword"></span><span id="range"></span><br/>
   <span class="prev">前</span>
   <span class="page"></span>
   <span class="next">次</span>
@@ -51,13 +51,6 @@
   
     // 検索結果表示
     function showResult(result) {
-      if(result.error) {
-        alert("エラー:" + result.error.code + " " + result.error.message);
-      }
-      
-      if(result.total_hit_count == 0) {
-        alert("検索結果が見つかりませんでした");
-      }
       // テーブルをヘッダ以外クリア
       $("#table td").parent().remove();
       // 検索結果を順次追加
@@ -126,7 +119,8 @@
         r = null;
         alert("範囲指定が不正です");
       }
-      $("#range").html(r);
+      $("#range").html("現在地より" + r + "mの範囲にあるレストラン");
+      
       // 表示中のヒット番号を表示
       var str = ((Number(query["offset_page"]) - 1)*10 + 1);
       if(Number(query["offset_page"])*10 < total) {
@@ -135,6 +129,9 @@
         str += "~" + total;
       }
       $(".page").html(str + "/" + total);
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      alert(jqXHR.status + ":" + errorThrown);
     });
     
     // 「前」クリック
