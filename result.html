@@ -6,6 +6,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <body>
+  検索結果:現在地より<span id="range"></span>mの範囲内で見つかったレストラン<br/>
   <span class="prev">前</span>
   <span class="page"></span>
   <span class="next">次</span>
@@ -87,6 +88,29 @@
       showResult(result);
       total = result.total_hit_count;
       
+      // range表示
+      var r = 0;
+      switch(query["range"]) {
+      case "1":
+        r = 300;
+        break;
+      case "2":
+        r = 500;
+        break;
+      case "3":
+        r = 1000;
+        break;
+      case "4":
+        r = 2000;
+        break;
+      case "5":
+        r = 3000;
+        break;
+      default:
+        r = null;
+        alert("範囲指定が不正です");
+      }
+      $("#range").html(r);
       // 表示中のヒット番号を表示
       var str = ((Number(query["offset_page"]) - 1)*10 + 1);
       if(Number(query["offset_page"])*10 < total) {
