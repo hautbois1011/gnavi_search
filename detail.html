@@ -46,13 +46,14 @@
         + "<img src=\"" + rest.image_url.shop_image2 + "\">");
     }
   
-    // ロード時の処理
-    $(window).on('load', function() {
+    // ページ更新時の処理
+    $(function() {
       var query = getQueryString();
       if(!query["rest_id"]) {
         alert("店舗idを指定してください");
         return;
       }
+      
       var url = "https://api.gnavi.co.jp/RestSearchAPI/v3/";
       var params = {
         keyid: "21a74b591f5aca9b1ebde8b6c7609ebb",

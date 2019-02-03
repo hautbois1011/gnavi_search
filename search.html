@@ -21,11 +21,11 @@
     <option value=4>2000m</option>
     <option value=5>3000m</option>
   </select>
-  <input type="button" onclick="search();" value="検索">
+  <input type="button" id="search" value="検索">
 
 
   <script>
-    // Geolocation APIに対応している
+    // Geolocation APIに対応しているか？
     if(!navigator.geolocation) {
       alert("この端末では位置情報が取得できません");
     }
@@ -61,16 +61,17 @@
         }
       );
     }
+  
+    $(function() {
     // 検索
-    function search() {
-      console.log("search onclick");
+    $("#search").on("click", function() {
       document.location = "result.html?latitude=" + lati + "&longitude=" + longi
                           + "&range=" + $("#range").val() + "&offset_page=1";
-    }
+    });
 
-    // ロード時の処理: 現在地取得
-    $(window).on("load", function() {
-      getPosition();
+    // ページ更新時の処理: 現在地取得
+    getPosition();
+    
     });
   </script>
 </html>

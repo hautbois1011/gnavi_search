@@ -68,6 +68,8 @@
       }
     }
   
+    $(function() {
+  
     var query = getQueryString();
     var url = "https://api.gnavi.co.jp/RestSearchAPI/v3/";
     var params = {
@@ -80,20 +82,19 @@
   
     var total = 0;
     
-    // ロード時の処理
-    $(window).on("load", function() {
-      $.getJSON(url, params, function(result) {
-        showResult(result);
-        total = result.total_hit_count;
-        
-        var str = ((Number(query["offset_page"]) - 1)*10 + 1);
-        if(Number(query["offset_page"])*10 < total) {
-          str += "~" + (Number(query["offset_page"])*10);
-        } else {
-          str += "~" + total;
-        }
-        $(".page").html(str + "/" + total);
-      });
+    // 検索
+    $.getJSON(url, params, function(result) {
+      showResult(result);
+      total = result.total_hit_count;
+      
+      // 表示中のヒット番号を表示
+      var str = ((Number(query["offset_page"]) - 1)*10 + 1);
+      if(Number(query["offset_page"])*10 < total) {
+        str += "~" + (Number(query["offset_page"])*10);
+      } else {
+        str += "~" + total;
+      }
+      $(".page").html(str + "/" + total);
     });
     
     // 「前」クリック
@@ -116,6 +117,8 @@
       // 次ページに飛ぶ
       document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
             + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) + 1);
+    });
+    
     });
   
   </script>
