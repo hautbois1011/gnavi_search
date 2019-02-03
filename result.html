@@ -6,7 +6,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
 <body>
-  検索結果:現在地より<span id="range"></span>mの範囲内で見つかったレストラン<br/>
+  検索結果:<span id="freeword"></span>現在地より<span id="range"></span>mの範囲内で見つかったレストラン<br/>
   <span class="prev">前</span>
   <span class="page"></span>
   <span class="next">次</span>
@@ -88,7 +88,8 @@
       latitude: query["latitude"],
       longitude: query["longitude"],
       range: query["range"],
-      offset_page: query["offset_page"]
+      offset_page: query["offset_page"],
+      freeword: query["freeword"]
     };
   
     var total = 0;
@@ -97,6 +98,11 @@
     $.getJSON(url, params, function(result) {
       showResult(result);
       total = result.total_hit_count;
+      
+      // freeword表示
+      if(query["freeword"]) {
+        $("#freeword").html("フリーワード\"" + query["freeword"] + "\"で");
+      }
       
       // range表示
       var r = 0;
@@ -139,7 +145,8 @@
       }
       // 前ページに飛ぶ
       document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) - 1);
+            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) - 1)
+            + "&freeword=" + encodeURIComponent(query["freeword"]);
     });
     
     // 「次」クリック
@@ -150,7 +157,8 @@
       }
       // 次ページに飛ぶ
       document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) + 1);
+            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) + 1)
+            + "&freeword=" + encodeURIComponent(query["freeword"]);
     });
     
     });

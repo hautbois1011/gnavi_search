@@ -20,7 +20,8 @@
     <option value=3 selected>1000m</option>
     <option value=4>2000m</option>
     <option value=5>3000m</option>
-  </select>
+  </select><br/>
+  <input type="text" id="freeword" placeholder="フリーワード">
   <input type="button" id="search" value="検索">
 
 
@@ -55,7 +56,7 @@
               alert("タイムアウト");
               break;
             default:
-              alert("エラーコード:"+error.code);
+              alert("エラーコード:" + error.code);
               break;
           }
         }
@@ -66,7 +67,8 @@
     // 検索
     $("#search").on("click", function() {
       document.location = "result.html?latitude=" + lati + "&longitude=" + longi
-                          + "&range=" + $("#range").val() + "&offset_page=1";
+                          + "&range=" + $("#range").val() + "&offset_page=1"
+                          + "&freeword=" + encodeURIComponent($("#freeword").val());
     });
 
     // ページ更新時の処理: 現在地取得
