@@ -62,8 +62,8 @@
       $("#table td").parent().remove();
       // 検索結果を順次追加
       for(var i in result.rest) {
-        var str = "<tr><td><a href=\"detail.html?rest_id=" + result.rest[i].id + "\">"
-          + result.rest[i].name + "</a></td><td>"
+        var str = "<tr><td class=\"name_cell\"><a href=\"detail.html?rest_id=" + result.rest[i].id
+          + "\">" + result.rest[i].name + "</a></td><td>"
           + getAccessString(result.rest[i].access) + "</td>";
           
         if(result.rest[i].pr.pr_short) {
@@ -162,6 +162,10 @@
     color: blue;
     cursor: pointer;
     text-decoration: underline;
+  }
+  
+  .name_cell {
+    background: skyblue;
   }
   </style>
 </body>
