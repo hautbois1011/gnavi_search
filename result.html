@@ -131,6 +131,7 @@
       $(".page").html(str + "/" + total);
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
+      // エラー
       alert(jqXHR.status + ":" + errorThrown);
     });
     
