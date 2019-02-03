@@ -62,10 +62,20 @@
       $("#table td").parent().remove();
       // 検索結果を順次追加
       for(var i in result.rest) {
-        $("#table").append("<tr><td><a href=\"detail.html?rest_id=" + result.rest[i].id + "\">"
+        var str = "<tr><td><a href=\"detail.html?rest_id=" + result.rest[i].id + "\">"
           + result.rest[i].name + "</a></td><td>"
-          + getAccessString(result.rest[i].access) + "</td><td>"
-          + "<img src=\"" + result.rest[i].image_url.shop_image1 + "\"></td></tr>");
+          + getAccessString(result.rest[i].access) + "</td>";
+          
+        if(result.rest[i].pr.pr_short) {
+          str += "<td rowspan=\"2\">"
+          + "<img src=\"" + result.rest[i].image_url.shop_image1 + "\"></td></tr>"
+          + "<tr><td colspan=\"2\">" + result.rest[i].pr.pr_short + "</td></tr>";
+        } else {
+          str += "<td>"
+          + "<img src=\"" + result.rest[i].image_url.shop_image1 + "\"></td></tr>";
+        }
+        
+        $("#table").append(str);
       }
     }
   
