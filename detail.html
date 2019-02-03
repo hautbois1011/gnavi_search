@@ -9,6 +9,7 @@
 <body>
   <h1>店舗名</h1>
   <div id="name"></div>
+  <div id="name_kana"></div>
   <h1>紹介</h1>
   <p>
     <div id="pr_short"></div>
@@ -47,7 +48,8 @@
     // 結果の表示
     function onGetJSON(result) {
       rest = result.rest[0];
-      $("#name").html(rest.name + '(' + rest.name_kana + ')');
+      $("#name").html(rest.name);
+      $("#name_kana").html(rest.name_kana);
       $("#pr_short").html(rest.pr.pr_short);
       $("#pr_long").html(rest.pr.pr_long);
       $("#address").html(rest.address);
@@ -94,6 +96,22 @@
     });
   </script>
   <style>
+  h1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: brown;
+  }
+  
+  #name {
+    font-size: 25px;
+    font-weight: bold;
+  }
+  
+  #name_kana {
+    font-size: 12px;
+    color: gray;
+  }
+  
   #pr_short {
     font-weight: bold;
     color: red;
