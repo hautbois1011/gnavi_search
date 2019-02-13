@@ -38,15 +38,15 @@ function getPosition() {
 
 function search_html_onload() {
   $(function() {
-  // 検索
-  $("#search").on("click", function() {
-    document.location = "result.html?latitude=" + lati + "&longitude=" + longi
-                      + "&range=" + $("#range").val() + "&offset_page=1"
-                      + "&freeword=" + encodeURIComponent($("#freeword").val());
-  });
+    // 検索
+    $("#search").on("click", function() {
+      document.location = "result.html?latitude=" + lati + "&longitude=" + longi
+                        + "&range=" + $("#range").val() + "&offset_page=1"
+                        + "&freeword=" + encodeURIComponent($("#freeword").val());
+    });
 
-  // ページ更新時の処理: 現在地取得
-  getPosition();
+    // ページ更新時の処理: 現在地取得
+    getPosition();
 
   });
 }
@@ -91,20 +91,16 @@ function showResult(result) {
   $("#table td").parent().remove();
   // 検索結果を順次追加
   for(var i in result.rest) {
-    var str = "<tr><td class=\"name_cell\"><a href=\"detail.html?rest_id=" + result.rest[i].id
-      + "\">" + result.rest[i].name + "</a></td><td>"
-      + getAccessString(result.rest[i].access) + "</td>";
+    var compile = _.template(document.getElementById('template').innerHTML);
+    var html = compile({
+        rest_id: result.rest[i].id,
+        name: result.rest[i].name,
+        access: getAccessString(result.rest[i].access),
+        img1: result.rest[i].image_url.shop_image1,
+        pr_short: result.rest[i].pr.pr_short
+    });
     
-    if(result.rest[i].pr.pr_short) {
-      str += "<td rowspan=\"2\">"
-      + "<img src=\"" + result.rest[i].image_url.shop_image1 + "\"></td></tr>"
-      + "<tr><td colspan=\"2\">" + result.rest[i].pr.pr_short + "</td></tr>";
-    } else {
-      str += "<td>"
-      + "<img src=\"" + result.rest[i].image_url.shop_image1 + "\"></td></tr>";
-    }
-    
-    $("#table").append(str);
+    $("#table").append(html);
   }
 }
 
@@ -147,60 +143,58 @@ function showHitNumbers(query, total) {
 
 function result_html_onload() {
   $(function() {
+    var query = getQueryString();
+    var url = "https://api.gnavi.co.jp/RestSearchAPI/v3/";
+    var params = {
+      keyid: "21a74b591f5aca9b1ebde8b6c7609ebb",
+      latitude: query["latitude"],
+      longitude: query["longitude"],
+      range: query["range"],
+      offset_page: query["offset_page"],
+      freeword: query["freeword"]
+    };
 
-  var query = getQueryString();
-  var url = "https://api.gnavi.co.jp/RestSearchAPI/v3/";
-  var params = {
-    keyid: "21a74b591f5aca9b1ebde8b6c7609ebb",
-    latitude: query["latitude"],
-    longitude: query["longitude"],
-    range: query["range"],
-    offset_page: query["offset_page"],
-    freeword: query["freeword"]
-  };
-
-  var total = 0;
-  
-  // 検索
-  $.getJSON(url, params, function(result) {
-    showResult(result);
-    total = result.total_hit_count;
-    // freeword表示
-    if(query["freeword"]) {
-      $("#freeword").html("フリーワード\"" + query["freeword"] + "\"で");
-    }
-    showRange(query);
-    showHitNumbers(query, total);
-  })
-  .fail(function(jqXHR, textStatus, errorThrown) {
-    // エラー
-    alert(jqXHR.status + ":" + errorThrown);
-  });
-  
-  // 「前」クリック
-  $(".prev").click(function() {
-    // 前ページがなければ何もしない
-    if(query["offset_page"] <= 1) {
-      return;
-    }
-    // 前ページに飛ぶ
-    document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-          + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) - 1)
-          + "&freeword=" + encodeURIComponent(query["freeword"]);
-  });
-  
-  // 「次」クリック
-  $(".next").click(function() {
-    // 次ページがなければ何もしない
-    if(Number(query["offset_page"])*10 >= total) {
-      return;
-    }
-    // 次ページに飛ぶ
-    document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-          + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) + 1)
-          + "&freeword=" + encodeURIComponent(query["freeword"]);
-  });
-  
+    var total = 0;
+    
+    // 検索
+    $.getJSON(url, params, function(result) {
+      showResult(result);
+      total = result.total_hit_count;
+      // freeword表示
+      if(query["freeword"]) {
+        $("#freeword").html("フリーワード\"" + query["freeword"] + "\"で");
+      }
+      showRange(query);
+      showHitNumbers(query, total);
+    })
+    .fail(function(jqXHR, textStatus, errorThrown) {
+      // エラー
+      alert(jqXHR.status + ":" + errorThrown);
+    });
+    
+    // 「前」クリック
+    $(".prev").click(function() {
+      // 前ページがなければ何もしない
+      if(query["offset_page"] <= 1) {
+        return;
+      }
+      // 前ページに飛ぶ
+      document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
+            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) - 1)
+            + "&freeword=" + encodeURIComponent(query["freeword"]);
+    });
+    
+    // 「次」クリック
+    $(".next").click(function() {
+      // 次ページがなければ何もしない
+      if(Number(query["offset_page"])*10 >= total) {
+        return;
+      }
+      // 次ページに飛ぶ
+      document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
+            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) + 1)
+            + "&freeword=" + encodeURIComponent(query["freeword"]);
+    });
   });
 }
 

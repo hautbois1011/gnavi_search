@@ -6,6 +6,7 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.js"></script>
   <script type="text/javascript" src="gnavi_search.js"></script>
   <link rel="stylesheet" type="text/css" href="gnavi_search.css">
 </head>
@@ -17,7 +18,7 @@
     <span class="page"></span>
     <span class="next">次</span>
     
-    <table id="table" border="1">
+    <table id="table" class="table">
       <tr><th>店舗名</th><th>アクセス(断りのない限り徒歩です)</th><th>画像</th></tr>
     </table>
     
@@ -31,7 +32,21 @@
     </a>
   </div>
   
-  <script>
+  <script type="text/template" id="template">
+    <tr>
+      <% if(pr_short) { %>
+          <td class="name_cell" rowspan="2"><a href="detail.html?rest_id=<%= rest_id %>"><%= name %></a></td>
+          <td><%= access %></td>
+          <td rowspan="2"><img src="<%= img1 %>"></td>
+        </tr>
+        <tr>
+          <td class="pr_cell"><%= pr_short %></td>
+      <% } else { %>
+        <td class="name_cell"><a href="detail.html?rest_id=<%= rest_id %>"><%= name %></a></td>
+        <td><%= access %></td>
+        <td><img src="<%= img1 %>"></td>
+      <% } %>
+    </tr>
   </script>
 
 </body>

@@ -11,22 +11,28 @@
 </head>
 
 <body>
-  <h1>位置情報取得</h1>
-  <button onclick="getPosition();">位置情報取得</button>
+  <button onclick="getPosition();" type="button" class="btn btn-primary">位置情報取得</button>
   
   <hr/>
   
   <h1>検索</h1>
-  範囲:
-  <select id="range">
-    <option value=1>300m</option>
-    <option value=2>500m</option>
-    <option value=3 selected>1000m</option>
-    <option value=4>2000m</option>
-    <option value=5>3000m</option>
-  </select><br/>
-  <input type="text" id="freeword" placeholder="フリーワード">
-  <input type="button" id="search" value="検索">
+  <div class="form-group">
+    <label for="range">範囲</label>
+    <select id="range" class="form-control">
+      <option value=1>300m</option>
+      <option value=2>500m</option>
+      <option value=3 selected>1000m</option>
+      <option value=4>2000m</option>
+      <option value=5>3000m</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="freeword">フリーワード検索</label>
+    <input type="text" class="form-control" id="freeword" placeholder="フリーワード">
+  </div>
+<!--  <input type="button" id="search" value="検索">-->
+  <button type="submit" class="btn btn-primary" id="search">検索</button>
 
 
   <script>
