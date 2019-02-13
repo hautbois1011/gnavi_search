@@ -6,6 +6,8 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="gnavi_search.js"></script>
+  <link rel="stylesheet" type="text/css" href="gnavi_search.css">
 </head>
 
 <body>
@@ -28,54 +30,5 @@
 
 
   <script>
-    // Geolocation APIに対応しているか？
-    if(!navigator.geolocation) {
-      alert("この端末では位置情報が取得できません");
-    }
-
-    // 緯度と経度
-    var lati = 0;
-    var longi = 0;
-
-    // 現在地取得処理
-    function getPosition() {
-      // 現在地を取得
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          lati = position.coords.latitude;
-          longi = position.coords.longitude;
-          alert("緯度:" + lati + ",経度:" + longi);
-        },
-        function(error) {
-          switch(error.code) {
-            case 1: //PERMISSION_DENIED
-              alert("位置情報の利用が許可されていません");
-              break;
-            case 2: //POSITION_UNAVAILABLE
-              alert("現在位置が取得できませんでした");
-              break;
-            case 3: //TIMEOUT
-              alert("タイムアウト");
-              break;
-            default:
-              alert("エラーコード:" + error.code);
-              break;
-          }
-        }
-      );
-    }
-  
-    $(function() {
-    // 検索
-    $("#search").on("click", function() {
-      document.location = "result.html?latitude=" + lati + "&longitude=" + longi
-                          + "&range=" + $("#range").val() + "&offset_page=1"
-                          + "&freeword=" + encodeURIComponent($("#freeword").val());
-    });
-
-    // ページ更新時の処理: 現在地取得
-    getPosition();
-    
-    });
   </script>
 </html>

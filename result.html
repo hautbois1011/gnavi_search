@@ -6,188 +6,34 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="gnavi_search.js"></script>
+  <link rel="stylesheet" type="text/css" href="gnavi_search.css">
+</head>
 
 <body>
-  検索結果:<span id="freeword"></span><span id="range"></span><br/>
-  <span class="prev">前</span>
-  <span class="page"></span>
-  <span class="next">次</span>
-  
-  <table id="table" border="1">
-    <tr><th>店舗名</th><th>アクセス(断りのない限り徒歩です)</th><th>画像</th></tr>
-  </table>
-  
-  <span class="prev">前</span>
-  <span class="page"></span>
-  <span class="next">次</span><br/>
-  <a href="search.html">検索ページに戻る</a><br/>
-  
-  <a href="https://api.gnavi.co.jp/api/scope/" target="_blank">
-    <img src="https://api.gnavi.co.jp/api/img/credit/api_265_65.gif" width="265" height="65" border="0" alt="グルメ情報検索サイト　ぐるなび">
-  </a>
+  <div id="result_html">
+    検索結果:<span id="freeword"></span><span id="range"></span><br/>
+    <span class="prev">前</span>
+    <span class="page"></span>
+    <span class="next">次</span>
+    
+    <table id="table" border="1">
+      <tr><th>店舗名</th><th>アクセス(断りのない限り徒歩です)</th><th>画像</th></tr>
+    </table>
+    
+    <span class="prev">前</span>
+    <span class="page"></span>
+    <span class="next">次</span><br/>
+    <a href="search.html">検索ページに戻る</a><br/>
+    
+    <a href="https://api.gnavi.co.jp/api/scope/" target="_blank">
+      <img src="https://api.gnavi.co.jp/api/img/credit/api_265_65.gif" width="265" height="65" border="0" alt="グルメ情報検索サイト　ぐるなび">
+    </a>
+  </div>
   
   <script>
-  
-    // GETパラメータを取得
-    function getQueryString() {
-      if(document.location.search.length <= 1) {
-        return null;
-      }
-      
-      var params = document.location.search.substring(1).split('&');
-      var result = new Object();
-      for(var i = 0; i < params.length; i++) {
-        var elem = params[i].split('=');
-        result[decodeURIComponent(elem[0])] = decodeURIComponent(elem[1]);
-      }
-      return result;
-    }
-  
-    // アクセスの文字列化
-    function getAccessString(access) {
-      var str = access.line + access.station + access.station_exit;
-      if(access.walk) {
-        str += "より" + access.walk + "分";
-      }
-      if(access.note) {
-        str += "(" + access.note + ")";
-      }
-      return str;
-    }
-  
-    // 検索結果表示
-    function showResult(result) {
-      // テーブルをヘッダ以外クリア
-      $("#table td").parent().remove();
-      // 検索結果を順次追加
-      for(var i in result.rest) {
-        var str = "<tr><td class=\"name_cell\"><a href=\"detail.html?rest_id=" + result.rest[i].id
-          + "\">" + result.rest[i].name + "</a></td><td>"
-          + getAccessString(result.rest[i].access) + "</td>";
-          
-        if(result.rest[i].pr.pr_short) {
-          str += "<td rowspan=\"2\">"
-          + "<img src=\"" + result.rest[i].image_url.shop_image1 + "\"></td></tr>"
-          + "<tr><td colspan=\"2\">" + result.rest[i].pr.pr_short + "</td></tr>";
-        } else {
-          str += "<td>"
-          + "<img src=\"" + result.rest[i].image_url.shop_image1 + "\"></td></tr>";
-        }
-        
-        $("#table").append(str);
-      }
-    }
-  
-    $(function() {
-  
-    var query = getQueryString();
-    var url = "https://api.gnavi.co.jp/RestSearchAPI/v3/";
-    var params = {
-      keyid: "21a74b591f5aca9b1ebde8b6c7609ebb",
-      latitude: query["latitude"],
-      longitude: query["longitude"],
-      range: query["range"],
-      offset_page: query["offset_page"],
-      freeword: query["freeword"]
-    };
-  
-    var total = 0;
-    
-    // 検索
-    $.getJSON(url, params, function(result) {
-      showResult(result);
-      total = result.total_hit_count;
-      
-      // freeword表示
-      if(query["freeword"]) {
-        $("#freeword").html("フリーワード\"" + query["freeword"] + "\"で");
-      }
-      
-      // range表示
-      var r = 0;
-      switch(query["range"]) {
-      case "1":
-        r = 300;
-        break;
-      case "2":
-        r = 500;
-        break;
-      case "3":
-        r = 1000;
-        break;
-      case "4":
-        r = 2000;
-        break;
-      case "5":
-        r = 3000;
-        break;
-      default:
-        r = null;
-        alert("範囲指定が不正です");
-      }
-      $("#range").html("現在地より" + r + "mの範囲にあるレストラン");
-      
-      // 表示中のヒット番号を表示
-      var str = ((Number(query["offset_page"]) - 1)*10 + 1);
-      if(Number(query["offset_page"])*10 < total) {
-        str += "~" + (Number(query["offset_page"])*10);
-      } else {
-        str += "~" + total;
-      }
-      $(".page").html(str + "/" + total);
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      // エラー
-      alert(jqXHR.status + ":" + errorThrown);
-    });
-    
-    // 「前」クリック
-    $(".prev").click(function() {
-      // 前ページがなければ何もしない
-      if(query["offset_page"] <= 1) {
-        return;
-      }
-      // 前ページに飛ぶ
-      document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) - 1)
-            + "&freeword=" + encodeURIComponent(query["freeword"]);
-    });
-    
-    // 「次」クリック
-    $(".next").click(function() {
-      // 次ページがなければ何もしない
-      if(Number(query["offset_page"])*10 >= total) {
-        return;
-      }
-      // 次ページに飛ぶ
-      document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) + 1)
-            + "&freeword=" + encodeURIComponent(query["freeword"]);
-    });
-    
-    });
-  
   </script>
-  
-  <style>
-  .prev, .next {
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  .name_cell {
-    background: skyblue;
-  }
-  
-  table {
-    border-collapse: collapse;
-  }
-  
-  table th, table td {
-    border: solid 1px black;
-  }
-  </style>
+
 </body>
 
 </html>

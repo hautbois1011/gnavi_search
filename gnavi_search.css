@@ -1,0 +1,38 @@
+h1 {
+  font-size: 20px;
+  font-weight: bold;
+  color: brown;
+}
+
+#name {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#name_kana {
+  font-size: 12px;
+  color: gray;
+}
+
+#pr_short {
+  font-weight: bold;
+  color: red;
+}
+
+.prev, .next {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.name_cell {
+  background: skyblue;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table th, table td {
+  border: solid 1px black;
+}
