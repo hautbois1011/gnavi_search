@@ -15,6 +15,8 @@ function getPosition() {
     function(position) {
       lati = position.coords.latitude;
       longi = position.coords.longitude;
+      $("#latitude").val(lati);
+      $("#longitude").val(longi);
       alert("緯度:" + lati + ",経度:" + longi);
     },
     function(error) {
@@ -38,16 +40,9 @@ function getPosition() {
 
 function search_html_onload() {
   $(function() {
-    // 検索
-    $("#search").on("click", function() {
-      document.location = "result.html?latitude=" + lati + "&longitude=" + longi
-                        + "&range=" + $("#range").val() + "&offset_page=1"
-                        + "&freeword=" + encodeURIComponent($("#freeword").val());
+    $("#get_position").on("click", function() {
+      getPosition();
     });
-
-    // ページ更新時の処理: 現在地取得
-    getPosition();
-
   });
 }
 
@@ -178,10 +173,17 @@ function result_html_onload() {
       if(query["offset_page"] <= 1) {
         return;
       }
+      
+      var params = {
+        latitude: query["latitude"],
+        longitude: query["longitude"],
+        range: query["range"],
+        offset_page: Number(query["offset_page"]) - 1,
+        freeword: encodeURIComponent(query["freeword"])
+      };
+      var searchParams = new URLSearchParams(params);
       // 前ページに飛ぶ
-      document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) - 1)
-            + "&freeword=" + encodeURIComponent(query["freeword"]);
+      document.location = `result.html?${searchParams}`;
     });
     
     // 「次」クリック
@@ -190,10 +192,17 @@ function result_html_onload() {
       if(Number(query["offset_page"])*10 >= total) {
         return;
       }
+      
+      var params = {
+        latitude: query["latitude"],
+        longitude: query["longitude"],
+        range: query["range"],
+        offset_page: Number(query["offset_page"]) + 1,
+        freeword: encodeURIComponent(query["freeword"])
+      };
+      var searchParams = new URLSearchParams(params);
       // 次ページに飛ぶ
-      document.location = "result.html?latitude=" + query["latitude"] + "&longitude=" + query["longitude"]
-            + "&range=" + query["range"] + "&offset_page=" + (Number(query["offset_page"]) + 1)
-            + "&freeword=" + encodeURIComponent(query["freeword"]);
+      document.location = `result.html?${searchParams}`;
     });
   });
 }

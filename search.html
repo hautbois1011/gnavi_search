@@ -11,28 +11,32 @@
 </head>
 
 <body>
-  <button onclick="getPosition();" type="button" class="btn btn-primary">位置情報取得</button>
+  <button id="get_position" type="button" class="btn btn-primary">位置情報取得</button>
   
   <hr/>
   
   <h1>検索</h1>
-  <div class="form-group">
-    <label for="range">範囲</label>
-    <select id="range" class="form-control">
-      <option value=1>300m</option>
-      <option value=2>500m</option>
-      <option value=3 selected>1000m</option>
-      <option value=4>2000m</option>
-      <option value=5>3000m</option>
-    </select>
-  </div>
-  
-  <div class="form-group">
-    <label for="freeword">フリーワード検索</label>
-    <input type="text" class="form-control" id="freeword" placeholder="フリーワード">
-  </div>
-<!--  <input type="button" id="search" value="検索">-->
-  <button type="submit" class="btn btn-primary" id="search">検索</button>
+  <form action="result.html" method="GET">
+    <div class="form-group">
+      <label for="range">範囲</label>
+      <select id="range" class="form-control" name="range">
+        <option value=1>300m</option>
+        <option value=2>500m</option>
+        <option value=3 selected>1000m</option>
+        <option value=4>2000m</option>
+        <option value=5>3000m</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="freeword">フリーワード検索</label>
+      <input type="text" name="freeword" class="form-control" id="freeword" placeholder="フリーワード">
+    </div>
+    <input type="hidden" name="latitude" class="form-control" id="latitude">
+    <input type="hidden" name="longitude" class="form-control" id="longitude">
+    <input type="hidden" name="offset_page" class="form-control" id="offset_page" value="1">
+    <button type="submit" class="btn btn-primary" id="search">検索</button>
+  </form>
 
 
   <script>
