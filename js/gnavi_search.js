@@ -50,7 +50,6 @@ if(location.pathname.indexOf("search.html") > 0) {
   search_html_onload();
 }
 
-
 // ---------------------------------------result
 
 // GETパラメータを取得
@@ -82,20 +81,19 @@ function getAccessString(access) {
 
 // 検索結果表示
 function showResult(result) {
-  // テーブルをヘッダ以外クリア
-  $("#table td").parent().remove();
   // 検索結果を順次追加
   for(var i in result.rest) {
-    var compile = _.template(document.getElementById('template').innerHTML);
+    var compile = _.template(document.getElementById('card_template').innerHTML);
     var html = compile({
         rest_id: result.rest[i].id,
         name: result.rest[i].name,
         access: getAccessString(result.rest[i].access),
         img1: result.rest[i].image_url.shop_image1,
-        pr_short: result.rest[i].pr.pr_short
+        pr_short: result.rest[i].pr.pr_short,
+        category: result.rest[i].category
     });
     
-    $("#table").append(html);
+    $("#cards").append(html);
   }
 }
 
@@ -159,12 +157,49 @@ function result_html_onload() {
       if(query["freeword"]) {
         $("#freeword").html("フリーワード\"" + query["freeword"] + "\"で");
       }
+      
       showRange(query);
       showHitNumbers(query, total);
+      
+      // 前ページがないなら押せなくする
+      if(query["offset_page"] <= 1) {
+        $(".prev").addClass("link_disabled");
+      }
+      // 次ページがないなら押せなくする
+      if(Number(query["offset_page"])*10 >= total) {
+        $(".next").addClass("link_disabled");
+      }
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
       // エラー
-      alert(jqXHR.status + ":" + errorThrown);
+      var error_message = "";
+      switch(jqXHR.status) {
+      case 400:
+        error_message = "指定されたパラメータは存在しません";
+        break;
+      case 401:
+        error_message = "認証エラーが発生しました";
+        break;
+      case 404:
+        error_message = "条件に合致する店舗が見つかりませんでした";
+        break;
+      case 405:
+        error_message = "不正なアクセスです";
+        break;
+      case 429:
+        error_message = "リクエスト回数上限を超過しました";
+        break;
+      case 500:
+        error_message = "処理中にエラーが発生しました";
+        break;
+      default:
+        error_message = "不明なエラーです";
+        break;
+      }
+      $("#error_message").html(error_message);
+      $(".prev").css("visibility", "hidden");
+      $(".next").css("visibility", "hidden");
+      $("#result_head").css("visibility", "hidden");
     });
     
     // 「前」クリック
@@ -234,8 +269,15 @@ function showDetail(result) {
   $("#tel").html(rest.tel);
   $("#opentime").html(rest.opentime);
   $("#holiday").html(rest.holiday);
-  $("#image").html("<img src=\"" + rest.image_url.shop_image1 + "\">"
-    + "<img src=\"" + rest.image_url.shop_image2 + "\">");
+//  $("#img1").html("<img class=\"img_item\" src=\"" + rest.image_url.shop_image1 + "\">");
+//  $("#img2").html("<img class=\"img_item\" src=\"" + rest.image_url.shop_image2 + "\">");
+  var compile = _.template(document.getElementById('img_template').innerHTML);
+  var html = compile({
+      img1: rest.image_url.shop_image1,
+      img2: rest.image_url.shop_image2
+  });
+  
+  $("#img_carousel").append(html);
   
   var device = getDevice();
   if(device == "mobile") {

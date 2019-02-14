@@ -6,38 +6,80 @@
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="gnavi_search.js"></script>
-  <link rel="stylesheet" type="text/css" href="gnavi_search.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.js"></script>
+  <script type="text/javascript" src="js/gnavi_search.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/gnavi_search.css">
 </head>
 
 <body>
-  <h1>店舗名</h1>
-  <div id="name"></div>
-  <div id="name_kana"></div>
-  <h1>紹介</h1>
-  <p>
-    <div id="pr_short"></div>
-  </p>
-  <p>
-    <div id="pr_long"></div>
-  </p>
-  <h1>住所</h1>
-  <div id="address"></div>
-  <h1>電話番号</h1>
-  <div id="tel"></div>
-  <h1>営業時間</h1>
-  <div id="opentime"></div>
-  <h1>休業日</h1>
-  <div id="holiday"></div>
-  <h1>画像</h1>
-  <div id="image"></div>
-  <h1>URL</h1>
-  <div id="url"></div>
-  
-  <a href="https://api.gnavi.co.jp/api/scope/" target="_blank">
-    <img src="https://api.gnavi.co.jp/api/img/credit/api_265_65.gif" width="265" height="65" border="0" alt="グルメ情報検索サイト　ぐるなび">
-  </a>
+  <div id="detail_main">
+    <div id="name"></div>
+    <div id="name_kana"></div>
+    <div id="img_carousel"></div>
+    
+    <p>
+      <div id="pr_short"></div>
+    </p>
+    <p>
+      <div id="pr_long"></div>
+    </p>
+    
+    <table class="table">
+      <tbody>
+        <tr>
+          <td class="list_head">住所</td>
+          <td><div id="address"></div></td>
+        </tr>
+        <tr>
+          <td class="list_head">電話番号</td>
+          <td><div id="tel"></div></td>
+        </tr>
+        <tr>
+          <td class="list_head">営業時間</td>
+          <td><div id="opentime"></div></td>
+        </tr>
+        <tr>
+          <td class="list_head">休業日</td>
+          <td><div id="holiday"></div></td>
+        </tr>
+        <tr>
+          <td class="list_head">URL</td>
+          <td><div id="url"></div></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <a href="https://api.gnavi.co.jp/api/scope/" target="_blank">
+      <img src="https://api.gnavi.co.jp/api/img/credit/api_265_65.gif" width="265" height="65" border="0" alt="グルメ情報検索サイト　ぐるなび">
+    </a>
+  </div>
 
-  <script>
+  <script type="text/template" id="img_template">
+    <% if(img1) { %>
+      <div id="images" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#images" data-slide-to="0" class="active"></li>
+          <li data-target="#images" data-slide-to="1"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div id="img1" class="carousel-item active">
+            <img class="img_item" src="<%= img1 %>">
+          </div>
+          <% if(img2) { %>
+            <div id="img2" class="carousel-item">
+              <img class="img_item" src="<%= img2 %>">
+            </div>
+          <% } %>
+        </div>
+        <a class="carousel-control-prev" href="#images" role="button" data-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#images" role="button" data-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    <% } %>
   </script>
 <html>

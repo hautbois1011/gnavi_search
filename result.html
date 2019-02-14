@@ -7,46 +7,44 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.6.1/lodash.js"></script>
-  <script type="text/javascript" src="gnavi_search.js"></script>
-  <link rel="stylesheet" type="text/css" href="gnavi_search.css">
+  <script type="text/javascript" src="js/gnavi_search.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/gnavi_search.css">
 </head>
 
 <body>
-  <div id="result_html">
-    検索結果:<span id="freeword"></span><span id="range"></span><br/>
+  <div id="result_main">
+    <div id="error_message"></div>
+    <div id="result_head">検索結果:<span id="freeword"></span><span id="range"></span><br/></div>
     <span class="prev">前</span>
     <span class="page"></span>
     <span class="next">次</span>
     
-    <table id="table" class="table">
-      <tr><th>店舗名</th><th>アクセス(断りのない限り徒歩です)</th><th>画像</th></tr>
-    </table>
+    <div id="cards"></div>
     
     <span class="prev">前</span>
     <span class="page"></span>
     <span class="next">次</span><br/>
-    <a href="search.html">検索ページに戻る</a><br/>
+    <a href="search.html" class="btn btn-primary">検索ページに戻る</a><br/>
     
     <a href="https://api.gnavi.co.jp/api/scope/" target="_blank">
       <img src="https://api.gnavi.co.jp/api/img/credit/api_265_65.gif" width="265" height="65" border="0" alt="グルメ情報検索サイト　ぐるなび">
     </a>
   </div>
-  
-  <script type="text/template" id="template">
-    <tr>
-      <% if(pr_short) { %>
-          <td class="name_cell" rowspan="2"><a href="detail.html?rest_id=<%= rest_id %>"><%= name %></a></td>
-          <td><%= access %></td>
-          <td rowspan="2"><img src="<%= img1 %>"></td>
-        </tr>
-        <tr>
-          <td class="pr_cell"><%= pr_short %></td>
-      <% } else { %>
-        <td class="name_cell"><a href="detail.html?rest_id=<%= rest_id %>"><%= name %></a></td>
-        <td><%= access %></td>
-        <td><img src="<%= img1 %>"></td>
-      <% } %>
-    </tr>
+
+  <script type="text/template" id="card_template">
+    <div class="card">
+      <div class="card-body">
+        <% if(img1) { %>
+          <img class="card_img" src="<%= img1 %>" alt="Card image cap">
+        <% } else { %>
+          <img class="card_img noimage" src="noimage.png" alt="Card image cap">
+        <% } %>
+        <div class="rest_name"><a href="detail.html?rest_id=<%= rest_id %>"><%= name %></a></div>
+        <div class="rest_category"><%= category %></div>
+        <div class="rest_access"><%= access %></div>
+        <p class="card-text"><%= pr_short %></p>
+      </div>
+    </div>
   </script>
 
 </body>

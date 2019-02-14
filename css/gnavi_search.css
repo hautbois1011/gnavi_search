@@ -1,0 +1,111 @@
+h1 {
+  font-size: 20px;
+  font-weight: bold;
+  color: brown;
+  margin: 10px;
+}
+
+.form-group {
+  margin: 10px;
+}
+
+.btn {
+  margin: 10px;
+}
+
+#search_main {
+  margin: 10px 20%;
+}
+
+#error_message {
+  font-weight: bold;
+  color: red;
+}
+
+#name {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+#name_kana {
+  font-size: 12px;
+  color: gray;
+}
+
+#pr_short {
+  font-weight: bold;
+  color: red;
+}
+
+#images {
+  background: silver;
+  width: 40%;
+  margin: auto;
+}
+
+#img1, #img2 {
+  text-align: center;
+}
+
+.img_item {
+  width: 300px;
+  height: 300px;
+}
+
+.list_head {
+  font-weight: bold;
+  background: aqua;
+  width: 100px;
+}
+
+#result_head {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#detail_main {
+  margin: 10px 20%;
+}
+
+.prev, .next {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link_disabled {
+  color: gray;
+  cursor: default;
+  text-decoration: none;
+}
+
+.card {
+  margin: 20px;
+}
+
+.card_img {
+  float: left;
+}
+
+.noimage {
+  width: 250px;
+  height: 250px;
+}
+
+.rest_name {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.rest_category {
+  font-size: 12px;
+  color: gray;
+}
+
+.rest_access {
+  color: red;
+}
+
+#result_main {
+  margin: 10px 20%;
+}
